@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::group(['prefix' => 'register','as' => 'card.'], function () {
+    Route::get('/', [CardController::class, 'index']);
+    Route::resource('card', 'CardController', ['names' => [
+        'create' => 'card.add',
+        'edit' => 'card.edit'
+    ]]);
 });
