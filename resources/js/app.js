@@ -25,9 +25,14 @@ import vuetify from './plugins/vuetify'
 
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
 Vue.component('add-card', require('./components/Card/AddCard.vue').default);
 Vue.component('edit-card', require('./components/Card/EditCard.vue').default);
+Vue.component('card', require('./components/Card/Card.vue').default);
+
 Vue.component('register', require('./components/Register/Register.vue').default);
+
+Vue.component('navbar', require('./components/Navbar.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

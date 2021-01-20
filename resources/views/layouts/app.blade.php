@@ -11,7 +11,11 @@
     <body>
         <div id="app">
             <v-app>
-            @yield('content-body')
+                <navbar></navbar>
+                <v-sheet class="mt-16"
+                >
+                    @yield('content-body')
+                </v-sheet>
             </v-app>
         </div>
         <script src="{{ mix('js/app.js') }}"></script>

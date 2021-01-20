@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CardController;
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'register','as' => 'card.'], function () {
-    Route::get('/', [CardController::class, 'index']);
-    Route::resource('card', 'CardController', ['names' => [
-        'create' => 'card.add',
-        'edit' => 'card.edit'
-    ]]);
+    Route::get('/', [RegisterController::class, 'PrintRegister']);
+    Route::get('/card/{id}', [RegisterController::class, 'OpenCard']);
 });

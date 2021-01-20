@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use Illuminate\Http\Request;
 
-class CardController extends Controller
+class CardsRegister extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Выводит общий реестр карт.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Card[]|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
-    public function index()
-    {
-        $cards = Card::all();
-        return view('register.register',compact('cards'));
+    static function GetCards() {
+        return Card::all();
     }
 
+    static function GetCardByID(int $id) {
+        return Card::where('card_id', $id)->first();
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -16,9 +16,10 @@ class CreateCardsTable extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id('card_id');
             $table->string('animal_name');
-            $table->enum('animal_category',['dog', 'cat']);
             $table->boolean('gender');
             $table->date('date_birth');
+            $table->bigInteger('animal_traits_id')->unsigned();
+            $table->foreign('animal_traits_id')->references('id')->on('animal_traits');
             $table->integer('identify_mark');
             $table->integer('chip_number');
             $table->string('owner_signs');
@@ -28,7 +29,7 @@ class CreateCardsTable extends Migration
             $table->string('scan_frame');
             $table->string('sterilisation_date');
             $table->date('vaccination_date');
-            $table->enum('current_status',['0', '1']);
+            $table->boolean('current_status');
             $table->timestamps();
         });
     }

@@ -8,12 +8,16 @@
             <v-list-item three-line>
                 <v-list-item-content>
                     <div class="overline mb-4">
-                        {{ card.animal_category === 'cat' ? 'кошка' : 'собака' }}
+                        {{ card.animal_traits.category === 'cat' ? 'кошка' : 'собака' }}
                     </div>
                     <v-list-item-title class="headline mb-1">
                         {{ card.animal_name }}
                     </v-list-item-title>
-                    <v-list-item-subtitle>Дата рождения: {{ card.date_birth }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>Пол: {{ !!card.gender ? 'женский' : 'мужской' }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>Статус: <span :class="{'green-text': card.current_status, 'red-text': !card.current_status }">
+                        {{ card.current_status ? 'в приюте' : 'выбыл' }}</span>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle>Описание: {{ getDescription(card.animal_traits) }}</v-list-item-subtitle>
                 </v-list-item-content>
 
                 <v-list-item-avatar
@@ -21,7 +25,7 @@
                     size="80"
                     color="grey"
                 >
-                    <v-img :src="setAvatarImage(card.picture, card.animal_category)"></v-img>
+                    <v-img :src="setAvatarImage(card.picture, card.animal_traits.category)"></v-img>
                 </v-list-item-avatar>
             </v-list-item>
 
@@ -29,6 +33,7 @@
                 <v-btn
                     rounded
                     color="success"
+                    @click="openCard(card.card_id)"
                 >
                     открыть
                 </v-btn>
@@ -53,11 +58,12 @@ export default {
     },
     mounted() {
         console.log(this.cards)
+        console.log(this.cards[0].animalTraits)
     },
 
     methods: {
         openCard(id) {
-            axios.get('/register/card/' + id)
+            window.location.href = '/register/card/'+id;
         },
         setAvatarImage(imageString, category) {
             console.log(imageString)
@@ -66,6 +72,33 @@ export default {
             }
             else
                 return imageString;
+        },
+        getDescription(traits) {
+            let sizes = {
+                'big' : 'большого размера',
+                'small' : 'маленького размера',
+                'medium' : 'среднего размера',
+            }
+            let wools = {
+                'long_wool' : 'длинношерстный',
+                'short_wool' : 'короткошерстный',
+                'hard_wool' : 'жесткошерстный',
+                'сurly_wool': 'кудрявая',
+            }
+            return sizes[traits.size] + ', ' + wools[traits.wool]
+        },
+        formatDate(stringDate) {
+            let date = new Date(stringDate);
+
+            let dd = date.getDate();
+            if (dd < 10) dd = '0' + dd;
+
+            let mm = date.getMonth() + 1;
+            if (mm < 10) mm = '0' + mm;
+
+            let yyyy = date.getFullYear();
+
+            return dd + '.' + mm + '.' + yyyy;
         }
     }
 }
@@ -81,7 +114,10 @@ export default {
     grid-column-gap: 20px;
     grid-row-gap: 20px;
 }
-
-.animal-card {
+.green-text {
+    color: #2fa360;
+}
+.red-text {
+    color: #ae1c17;
 }
 </style>
