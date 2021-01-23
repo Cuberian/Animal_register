@@ -37,6 +37,7 @@ class CardFactory extends Factory
             'sterilisation_date' => $this->faker->date(),
             'vaccination_date' => $this->faker->date(),
             'current_status' => $this->faker->boolean,
+            'change_status_date' => $this->faker->date(),
         ];
     }
 }

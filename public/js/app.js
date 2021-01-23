@@ -1866,6 +1866,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var _mixins_usages__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/usages */ "./resources/js/mixins/usages.js");
+/* harmony import */ var _mixins_localization__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/localization */ "./resources/js/mixins/localization.js");
 //
 //
 //
@@ -1915,14 +1917,148 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Card",
+  mixins: [_mixins_usages__WEBPACK_IMPORTED_MODULE_0__.default, _mixins_localization__WEBPACK_IMPORTED_MODULE_1__.default],
   props: {
     card: {
       type: Object,
       required: true
     }
-  }
+  },
+  data: function data() {
+    return {
+      tab: null
+    };
+  },
+  mounted: function mounted() {
+    console.log(this.card);
+  },
+  methods: {}
 });
 
 /***/ }),
@@ -2032,6 +2168,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var _mixins_usages__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/usages */ "./resources/js/mixins/usages.js");
 //
 //
 //
@@ -2076,8 +2213,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Register",
+  mixins: [_mixins_usages__WEBPACK_IMPORTED_MODULE_0__.default],
   props: {
     cards: {
       type: Array,
@@ -2103,29 +2242,6 @@ __webpack_require__.r(__webpack_exports__);
       if (imageString !== null) {
         return category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg';
       } else return imageString;
-    },
-    getDescription: function getDescription(traits) {
-      var sizes = {
-        'big': 'большого размера',
-        'small': 'маленького размера',
-        'medium': 'среднего размера'
-      };
-      var wools = {
-        'long_wool': 'длинношерстный',
-        'short_wool': 'короткошерстный',
-        'hard_wool': 'жесткошерстный',
-        'сurly_wool': 'кудрявая'
-      };
-      return sizes[traits.size] + ', ' + wools[traits.wool];
-    },
-    formatDate: function formatDate(stringDate) {
-      var date = new Date(stringDate);
-      var dd = date.getDate();
-      if (dd < 10) dd = '0' + dd;
-      var mm = date.getMonth() + 1;
-      if (mm < 10) mm = '0' + mm;
-      var yyyy = date.getFullYear();
-      return dd + '.' + mm + '.' + yyyy;
     }
   }
 });
@@ -2221,6 +2337,82 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/mixins/localization.js":
+/*!*********************************************!*\
+  !*** ./resources/js/mixins/localization.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      wool_type: {
+        'short_wool': 'короткая шерсть',
+        'long_wool': 'длинная шерсть',
+        'hard_wool': 'жесткая шерсть',
+        'сurly_wool': 'кудрявая шерсть'
+      },
+      size_type: {
+        'big': 'большой',
+        'medium': 'средний',
+        'small': 'маленький'
+      },
+      category: {
+        'cat': 'Кошка',
+        'dog': 'Собака'
+      }
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/usages.js":
+/*!***************************************!*\
+  !*** ./resources/js/mixins/usages.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    formatDate: function formatDate(stringDate) {
+      var date = new Date(stringDate);
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+      var yyyy = date.getFullYear();
+      return dd + '.' + mm + '.' + yyyy;
+    },
+    getDescription: function getDescription(traits) {
+      var sizes = {
+        'big': 'большого размера',
+        'small': 'маленького размера',
+        'medium': 'среднего размера'
+      };
+      var wools = {
+        'long_wool': 'длинношерстный',
+        'short_wool': 'короткошерстный',
+        'hard_wool': 'жесткошерстный',
+        'сurly_wool': 'кудрявая'
+      };
+      return sizes[traits.size] + ', ' + wools[traits.wool];
+    }
+  }
+});
 
 /***/ }),
 
@@ -6716,7 +6908,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.grid-container[data-v-4b2ad974] {\n    max-width: 85%;\n    padding: 0 10px 0 10px;\n    display: grid;\n    grid-template-columns: 25% 60%;\n    grid-column-gap: 20px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.grid-container[data-v-4b2ad974] {\n    max-width: 85%;\n    height: 100%;\n    padding: 0 10px 0 10px;\n    display: grid;\n    grid-template-columns: 250px 60%;\n    grid-template-rows: 39% 61%;\n    grid-column-gap: 20px;\n    grid-row-gap: 20px;\n}\n.card-status__date[data-v-4b2ad974] {\n    color: white !important;\n}\n.card-status[data-v-4b2ad974] {\n    display: flex;\n    width: 70%;\n    flex-direction: row;\n    justify-content: space-between;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -38581,100 +38773,542 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "grid-container mt-10  mx-auto" }, [
-    _c("div", [
-      _c(
-        "div",
-        { staticClass: "text-center" },
-        [
-          _c(
-            "v-avatar",
-            {
-              staticClass: "profile",
-              attrs: { color: "grey", size: "250", tile: "" }
-            },
-            [
-              _c("v-img", {
-                attrs: {
-                  src: "https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-                }
-              })
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c(
-        "div",
-        [
-          _c(
-            "v-list-item",
-            { attrs: { "two-line": "" } },
-            [
-              _c(
-                "v-list-item-content",
-                [
-                  _c("v-list-item-title", [_vm._v("Пол")]),
-                  _vm._v(" "),
-                  _c("v-list-item-subtitle", [_vm._v("Мужской")])
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-list-item",
-            { attrs: { "two-line": "" } },
-            [
-              _c(
-                "v-list-item-content",
-                [
-                  _c("v-list-item-title", [_vm._v("Дата рождения")]),
-                  _vm._v(" "),
-                  _c("v-list-item-subtitle", [_vm._v("17.10.2000")])
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", [
-      _c(
-        "div",
-        [
-          _c("h3", { staticClass: "mb-0" }, [_vm._v("Pusheen")]),
-          _vm._v(" "),
-          _c("p", { staticClass: "text--subtitle" }, [_vm._v("Кошка")]),
-          _vm._v(" "),
-          _c(
-            "v-chip",
-            {
-              staticClass: "mt-5",
+    _c(
+      "div",
+      { staticClass: "text-center" },
+      [
+        _c(
+          "v-avatar",
+          {
+            staticClass: "profile",
+            attrs: { color: "grey", size: "250", tile: "" }
+          },
+          [
+            _c("v-img", {
               attrs: {
-                color: "green",
-                "text-color": "white",
-                label: "",
-                large: ""
+                src: "https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
               }
-            },
-            [_vm._v("\n                В приюте\n            ")]
+            })
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticStyle: { position: "relative" } },
+      [
+        _c("h1", { staticClass: "mb-0" }, [
+          _vm._v(_vm._s(_vm.card.animal_name))
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "text--subtitle" }, [
+          _vm._v(
+            _vm._s(
+              _vm.card.animal_traits.category === "cat" ? "Кошка" : "Собака"
+            ) + " "
           )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div")
-    ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "card-status", staticStyle: { display: "flex" } },
+          [
+            _c(
+              "v-chip",
+              {
+                staticClass: "mt-5  text-center",
+                attrs: {
+                  color: !!_vm.card.current_status ? "green" : "red",
+                  "text-color": "white",
+                  label: "",
+                  large: ""
+                }
+              },
+              [
+                _c(
+                  "v-list-item",
+                  [
+                    _c(
+                      "v-list-item-content",
+                      [
+                        _c(
+                          "v-list-item-title",
+                          { staticClass: "white--text" },
+                          [_vm._v("Статус")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-list-item-subtitle",
+                          { staticClass: "white--text" },
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(
+                                  !!_vm.card.current_status
+                                    ? "В приюте"
+                                    : "Выбыл"
+                                ) +
+                                "\n                        "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-chip",
+              {
+                staticClass: "mt-5 text-center",
+                attrs: {
+                  color: "grey",
+                  "text-color": "white",
+                  label: "",
+                  large: ""
+                }
+              },
+              [
+                _c(
+                  "v-list-item",
+                  [
+                    _c(
+                      "v-list-item-content",
+                      [
+                        _c(
+                          "v-list-item-title",
+                          { staticClass: "white--text" },
+                          [_vm._v("Дата изменения статуса")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-list-item-subtitle",
+                          { staticClass: "white--text" },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm.formatDate(_vm.card.change_status_date)
+                              )
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "v-tabs",
+          {
+            staticStyle: { position: "absolute", bottom: "0" },
+            attrs: { "active-class": "green--text", "align-with-title": "" },
+            model: {
+              value: _vm.tab,
+              callback: function($$v) {
+                _vm.tab = $$v
+              },
+              expression: "tab"
+            }
+          },
+          [
+            _c("v-tabs-slider", { attrs: { color: "green" } }),
+            _vm._v(" "),
+            _c("v-tab", { staticClass: "ml-0" }, [
+              _vm._v("Подробная информаия")
+            ]),
+            _vm._v(" "),
+            _c("v-tab", [_vm._v("Место содержания")]),
+            _vm._v(" "),
+            _c("v-tab", [_vm._v("Документы")])
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      [
+        _c(
+          "v-list-item",
+          { attrs: { "two-line": "" } },
+          [
+            _c(
+              "v-list-item-content",
+              [
+                _c("v-list-item-title", [_vm._v("Пол")]),
+                _vm._v(" "),
+                _c("v-list-item-subtitle", [
+                  _vm._v(_vm._s(!!_vm.card.gender ? "Женский" : "Мужской"))
+                ])
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "v-list-item",
+          { attrs: { "two-line": "" } },
+          [
+            _c(
+              "v-list-item-content",
+              [
+                _c("v-list-item-title", [_vm._v("Дата рождения")]),
+                _vm._v(" "),
+                _c("v-list-item-subtitle", [
+                  _vm._v(_vm._s(_vm.formatDate(_vm.card.date_birth)))
+                ])
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "v-list-item",
+          { attrs: { "two-line": "" } },
+          [
+            _c(
+              "v-list-item-content",
+              [
+                _c("v-list-item-title", [_vm._v("Дата стерилизации")]),
+                _vm._v(" "),
+                _c("v-list-item-subtitle", [
+                  _vm._v(_vm._s(_vm.formatDate(_vm.card.sterilisation_date)))
+                ])
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "v-list-item",
+          { attrs: { "two-line": "" } },
+          [
+            _c(
+              "v-list-item-content",
+              [
+                _c("v-list-item-title", [_vm._v("Дата вакцинации")]),
+                _vm._v(" "),
+                _c("v-list-item-subtitle", [
+                  _vm._v(_vm._s(_vm.formatDate(_vm.card.vaccination_date)))
+                ])
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      [
+        _c(
+          "v-tabs-items",
+          {
+            model: {
+              value: _vm.tab,
+              callback: function($$v) {
+                _vm.tab = $$v
+              },
+              expression: "tab"
+            }
+          },
+          [
+            _c(
+              "v-tab-item",
+              [
+                _c(
+                  "v-card",
+                  { attrs: { flat: "" } },
+                  [
+                    _c(
+                      "v-list-item",
+                      { attrs: { "two-line": "" } },
+                      [
+                        _c(
+                          "v-list-item-content",
+                          [
+                            _c("v-list-item-title", [
+                              _vm._v("Черты владельца")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-list-item-subtitle", [
+                              _vm._v(_vm._s(_vm.card.owner_signs))
+                            ])
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-row",
+                      [
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "5" } },
+                          [
+                            _c(
+                              "v-list-item",
+                              { attrs: { "two-line": "" } },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Размер животного")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-item-subtitle", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(
+                                            _vm.size_type[
+                                              _vm.card.animal_traits.size
+                                            ]
+                                              ? _vm.size_type[
+                                                  _vm.card.animal_traits.size
+                                                ]
+                                              : _vm.card.animal_traits.size
+                                          ) +
+                                          "\n                                        "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "5" } },
+                          [
+                            _c(
+                              "v-list-item",
+                              { attrs: { "two-line": "" } },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Тип шерсти")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-item-subtitle", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(
+                                            _vm.wool_type[
+                                              _vm.card.animal_traits.wool
+                                            ]
+                                              ? _vm.wool_type[
+                                                  _vm.card.animal_traits.wool
+                                                ]
+                                              : _vm.card.animal_traits.wool
+                                          ) +
+                                          "\n                                        "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-row",
+                      [
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "5" } },
+                          [
+                            _c(
+                              "v-list-item",
+                              { attrs: { "two-line": "" } },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("ID Чипа")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-item-subtitle", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(_vm.card.chip_number) +
+                                          "\n                                        "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "5" } },
+                          [
+                            _c(
+                              "v-list-item",
+                              { attrs: { "two-line": "" } },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("ID Метки")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-item-subtitle", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(_vm.card.identify_mark) +
+                                          "\n                                        "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-tab-item",
+              [
+                _c(
+                  "v-card",
+                  { attrs: { flat: "" } },
+                  [
+                    _c(
+                      "v-list-item",
+                      { attrs: { "three-line": "" } },
+                      [
+                        _c(
+                          "v-list-item-content",
+                          [
+                            _c("v-list-item-title", [
+                              _vm._v("Адрес места содержания")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-subtitle",
+                              { directives: [{ name: "", rawName: "v-" }] },
+                              [_vm._v(_vm._s(_vm.card.place))]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-list-item",
+                      { attrs: { "three-line": "" } },
+                      [
+                        _c(
+                          "v-list-item-content",
+                          [
+                            _c("v-list-item-title", [
+                              _vm._v("Место содержания")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-list-item-subtitle", [
+                              _vm._v(_vm._s(_vm.card.municipality))
+                            ])
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-tab-item",
+              [
+                _c(
+                  "v-card",
+                  { attrs: { flat: "" } },
+                  [
+                    _c("v-card-text", {
+                      domProps: { textContent: _vm._s("тут доки") }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
