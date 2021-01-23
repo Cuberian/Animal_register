@@ -15,4 +15,12 @@ class RegisterController extends Controller
         $card = CardsRegister::GetCardByID($id);
         return view('card.open_card', compact('card'));
     }
+    function CreateCard() {
+        return view('card.add_card');
+    }
+
+    function EditCard(int $id) {
+        $card = CardsRegister::GetCardByID($id);
+        return view('card.edit_card', compact('card'));
+    }
 }

@@ -28,7 +28,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 Vue.component('add-card', require('./components/Card/AddCard.vue').default);
 Vue.component('edit-card', require('./components/Card/EditCard.vue').default);
-Vue.component('card', require('./components/Card/Card.vue').default);
+Vue.component('animal-card', require('./components/Card/ShowCard.vue').default);
 
 Vue.component('register', require('./components/Register/Register.vue').default);
 

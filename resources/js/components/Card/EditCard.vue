@@ -1,10 +1,18 @@
 <template>
-<div>Edit Card Component</div>
+<div>
+
+</div>
 </template>
 
 <script>
 export default {
-    name: "EditCard.vue"
+    name: "EditCard.vue",
+    props: {
+        card: {
+            type: Object,
+            required: true
+        }
+    }
 }
 </script>
 

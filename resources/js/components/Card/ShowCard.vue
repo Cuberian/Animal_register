@@ -4,16 +4,34 @@
                 <v-avatar
                 class="profile"
                 color="grey"
-                size="250"
+                size="100%"
                 tile
             >
                 <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
             </v-avatar>
             </div>
         <div style="position: relative">
-            <h1 class="mb-0">{{ card.animal_name }}</h1>
-            <p class="text--subtitle">{{ card.animal_traits.category === 'cat' ? 'Кошка' : 'Собака' }} </p>
-            <div style="display: flex;" class="card-status">
+            <v-row>
+                <v-col cols="10">
+                    <h1 class="mb-0">{{ card.animal_name }}</h1>
+                    <p class="text--subtitle">{{ card.animal_traits.category === 'cat' ? 'Кошка' : 'Собака' }} </p>
+                </v-col>
+                <v-col cols="2">
+                    <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        large
+                        color="green"
+                        @click="editCard(card.card_id)"
+                    >
+                        <v-icon dark>
+                            mdi-pencil
+                        </v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
+            <div style="display: flex; max-width: 100%;" class="card-status">
                 <v-chip
                     class="mt-5  text-center"
                     :color="!!card.current_status ? 'green' : 'red'"
@@ -47,9 +65,9 @@
             </div>
             <v-tabs
                 active-class="green--text"
+                show-arrows
                 style="position: absolute; bottom: 0"
-                v-model="tab"
-                align-with-title>
+                v-model="tab">
                 <v-tabs-slider color="green"></v-tabs-slider>
                 <v-tab class="ml-0">Подробная информаия</v-tab>
                 <v-tab>Место содержания</v-tab>
@@ -190,7 +208,9 @@ export default {
         console.log(this.card);
     },
     methods: {
-
+        editCard(id) {
+            window.location.href = '/register/card/' + id + '/edit';
+        }
     }
 }
 </script>

@@ -1,4 +1,13 @@
 <template>
+    <div>
+    <v-btn
+        rounded
+        color="success"
+        class="mt-4 ml-2"
+        @click="createCard()"
+    >
+        Создать карту
+    </v-btn>
     <div v-if="cards.length > 0" class="grid-container justify-content-center mt-3">
         <v-card
             class="animal-card"
@@ -40,6 +49,7 @@
             </v-card-actions>
         </v-card>
     </div>
+    </div>
 </template>
 
 <script>
@@ -65,7 +75,10 @@ export default {
 
     methods: {
         openCard(id) {
-            window.location.href = '/register/card/'+id;
+            window.location.href = '/register/card/show/'+id;
+        },
+        createCard() {
+            window.location.href = '/register/card/create';
         },
         setAvatarImage(imageString, category) {
             console.log(imageString)

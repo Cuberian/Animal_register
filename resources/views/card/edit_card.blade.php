@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content-body')
-    <edit-card></edit-card>
+    <edit-card :card="{{$card}}"></edit-card>
 @endsection

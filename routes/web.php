@@ -17,5 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'register','as' => 'card.'], function () {
     Route::get('/', [RegisterController::class, 'PrintRegister']);
-    Route::get('/card/{id}', [RegisterController::class, 'OpenCard']);
+    Route::get('/card/show/{id}', [RegisterController::class, 'OpenCard']);
+    Route::get('/card/create', [RegisterController::class, 'CreateCard']);
+    Route::get('/card/{id}/edit', [RegisterController::class, 'EditCard']);
 });

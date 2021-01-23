@@ -12,7 +12,7 @@
         <div id="app">
             <v-app>
                 <navbar></navbar>
-                <v-sheet class="mt-16" height="80%">
+                <v-sheet class="mt-16" height="80vh">
                     @yield('content-body')
                 </v-sheet>
             </v-app>
