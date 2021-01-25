@@ -23,7 +23,7 @@
                         dark
                         large
                         color="green"
-                        @click="editCard(card.card_id)"
+                        @click="editCard(card.id)"
                     >
                         <v-icon dark>
                             mdi-pencil
@@ -31,37 +31,43 @@
                     </v-btn>
                 </v-col>
             </v-row>
-            <div style="display: flex; max-width: 100%;" class="card-status">
-                <v-chip
-                    class="mt-5  text-center"
-                    :color="!!card.current_status ? 'green' : 'red'"
-                    text-color="white"
-                    label
-                    large
-                >
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title class="white--text">Статус</v-list-item-title>
-                            <v-list-item-subtitle class="white--text">
-                                {{ !!card.current_status ? 'В приюте' : 'Выбыл' }}
-                            </v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-chip>
-                <v-chip
-                    class="mt-5 text-center"
-                    color="grey"
-                    text-color="white"
-                    label
-                    large
-                >
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title class="white--text">Дата изменения статуса</v-list-item-title>
-                            <v-list-item-subtitle class="white--text">{{ formatDate(card.change_status_date) }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-chip>
+            <div class="mt-2">
+                <v-row>
+                    <v-col lg="2" md="12">
+                        <v-chip
+                        class="text-center"
+                        :color="!!card.current_status ? 'green' : 'red'"
+                        text-color="white"
+                        label
+                        large
+                    >
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title class="white--text">Статус</v-list-item-title>
+                                <v-list-item-subtitle class="white--text">
+                                    {{ !!card.current_status ? 'В приюте' : 'Выбыл' }}
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-chip>
+                    </v-col>
+                    <v-col lg="4" md="12">
+                        <v-chip
+                        class="mt-lg-0 mt-md-3 text-center"
+                        color="grey"
+                        text-color="white"
+                        label
+                        large
+                    >
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title class="white--text">Дата изменения статуса</v-list-item-title>
+                                <v-list-item-subtitle class="white--text">{{ formatDate(card.change_status_date) }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-chip>
+                    </v-col>
+                </v-row>
             </div>
             <v-tabs
                 active-class="green--text"
@@ -221,8 +227,8 @@ export default {
     height: 100%;
     padding: 0 10px 0 10px;
     display: grid;
-    grid-template-columns: 250px 60%;
-    grid-template-rows: 39% 61%;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 25% 75%;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
 }

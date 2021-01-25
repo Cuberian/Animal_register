@@ -17,7 +17,7 @@ class CardsRegister extends Controller
     }
 
     static function GetCardByID(int $id) {
-        return Card::where('card_id', $id)->first();
+        return Card::where('id', $id)->first();
     }
     /**
      * Show the form for creating a new resource.

@@ -2086,6 +2086,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -6951,7 +6957,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.grid-container[data-v-798c0591] {\n    max-width: 85%;\n    height: 100%;\n    padding: 0 10px 0 10px;\n    display: grid;\n    grid-template-columns: 250px 60%;\n    grid-template-rows: 39% 61%;\n    grid-column-gap: 20px;\n    grid-row-gap: 20px;\n}\n.card-status__date[data-v-798c0591] {\n    color: white !important;\n}\n.card-status[data-v-798c0591] {\n    display: flex;\n    width: 70%;\n    flex-direction: row;\n    justify-content: space-between;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.grid-container[data-v-798c0591] {\n    max-width: 85%;\n    height: 100%;\n    padding: 0 10px 0 10px;\n    display: grid;\n    grid-template-columns: 25% 75%;\n    grid-template-rows: 25% 75%;\n    grid-column-gap: 20px;\n    grid-row-gap: 20px;\n}\n.card-status__date[data-v-798c0591] {\n    color: white !important;\n}\n.card-status[data-v-798c0591] {\n    display: flex;\n    width: 70%;\n    flex-direction: row;\n    justify-content: space-between;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -38898,7 +38904,7 @@ var render = function() {
                     attrs: { fab: "", dark: "", large: "", color: "green" },
                     on: {
                       click: function($event) {
-                        return _vm.editCard(_vm.card.card_id)
+                        return _vm.editCard(_vm.card.id)
                       }
                     }
                   },
@@ -38920,94 +38926,113 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          {
-            staticClass: "card-status",
-            staticStyle: { display: "flex", "max-width": "100%" }
-          },
+          { staticClass: "mt-2" },
           [
             _c(
-              "v-chip",
-              {
-                staticClass: "mt-5  text-center",
-                attrs: {
-                  color: !!_vm.card.current_status ? "green" : "red",
-                  "text-color": "white",
-                  label: "",
-                  large: ""
-                }
-              },
+              "v-row",
               [
                 _c(
-                  "v-list-item",
+                  "v-col",
+                  { attrs: { lg: "2", md: "12" } },
                   [
                     _c(
-                      "v-list-item-content",
+                      "v-chip",
+                      {
+                        staticClass: "text-center",
+                        attrs: {
+                          color: !!_vm.card.current_status ? "green" : "red",
+                          "text-color": "white",
+                          label: "",
+                          large: ""
+                        }
+                      },
                       [
                         _c(
-                          "v-list-item-title",
-                          { staticClass: "white--text" },
-                          [_vm._v("Статус")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-list-item-subtitle",
-                          { staticClass: "white--text" },
+                          "v-list-item",
                           [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(
-                                  !!_vm.card.current_status
-                                    ? "В приюте"
-                                    : "Выбыл"
-                                ) +
-                                "\n                        "
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c(
+                                  "v-list-item-title",
+                                  { staticClass: "white--text" },
+                                  [_vm._v("Статус")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item-subtitle",
+                                  { staticClass: "white--text" },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(
+                                          !!_vm.card.current_status
+                                            ? "В приюте"
+                                            : "Выбыл"
+                                        ) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
                             )
-                          ]
+                          ],
+                          1
                         )
                       ],
                       1
                     )
                   ],
                   1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "v-chip",
-              {
-                staticClass: "mt-5 text-center",
-                attrs: {
-                  color: "grey",
-                  "text-color": "white",
-                  label: "",
-                  large: ""
-                }
-              },
-              [
+                ),
+                _vm._v(" "),
                 _c(
-                  "v-list-item",
+                  "v-col",
+                  { attrs: { lg: "4", md: "12" } },
                   [
                     _c(
-                      "v-list-item-content",
+                      "v-chip",
+                      {
+                        staticClass: "mt-lg-0 mt-md-3 text-center",
+                        attrs: {
+                          color: "grey",
+                          "text-color": "white",
+                          label: "",
+                          large: ""
+                        }
+                      },
                       [
                         _c(
-                          "v-list-item-title",
-                          { staticClass: "white--text" },
-                          [_vm._v("Дата изменения статуса")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-list-item-subtitle",
-                          { staticClass: "white--text" },
+                          "v-list-item",
                           [
-                            _vm._v(
-                              _vm._s(
-                                _vm.formatDate(_vm.card.change_status_date)
-                              )
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c(
+                                  "v-list-item-title",
+                                  { staticClass: "white--text" },
+                                  [_vm._v("Дата изменения статуса")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item-subtitle",
+                                  { staticClass: "white--text" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.formatDate(
+                                          _vm.card.change_status_date
+                                        )
+                                      )
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
                             )
-                          ]
+                          ],
+                          1
                         )
                       ],
                       1
@@ -39568,7 +39593,7 @@ var render = function() {
               return _c(
                 "v-card",
                 {
-                  key: card.card_id,
+                  key: card.id,
                   staticClass: "animal-card",
                   attrs: { outlined: "" }
                 },
@@ -39670,7 +39695,7 @@ var render = function() {
                           attrs: { rounded: "", color: "success" },
                           on: {
                             click: function($event) {
-                              return _vm.openCard(card.card_id)
+                              return _vm.openCard(card.id)
                             }
                           }
                         },

@@ -14,7 +14,7 @@ class CreateCardsTable extends Migration
     public function up()
     {
         Schema::create('cards', function (Blueprint $table) {
-            $table->id('card_id');
+            $table->id();
             $table->string('animal_name');
             $table->boolean('gender');
             $table->date('date_birth');

@@ -12,7 +12,7 @@
         <v-card
             class="animal-card"
             outlined
-            v-for="card in cards" :key="card.card_id"
+            v-for="card in cards" :key="card.id"
         >
             <v-list-item three-line>
                 <v-list-item-content>
@@ -42,7 +42,7 @@
                 <v-btn
                     rounded
                     color="success"
-                    @click="openCard(card.card_id)"
+                    @click="openCard(card.id)"
                 >
                     открыть
                 </v-btn>
