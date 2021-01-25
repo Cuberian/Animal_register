@@ -19,10 +19,12 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-import VueRouter from 'vue-router'
+import {  ValidationProvider, ValidationObserver } from 'vee-validate';
 
 import vuetify from './plugins/vuetify'
 
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
