@@ -32,11 +32,13 @@ export default {
                 'long_wool' : 'длинношерстный',
                 'short_wool' : 'короткошерстный',
                 'hard_wool' : 'жесткошерстный',
-                'сurly_wool': 'кудрявая',
+                'curly_wool': 'кудрявая',
             }
             return sizes[traits.size] + ', ' + wools[traits.wool]
         },
-
+        backToRegister() {
+            window.location.href = '/register';
+        }
     }
 }
 

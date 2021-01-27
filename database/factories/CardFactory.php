@@ -29,6 +29,7 @@ class CardFactory extends Factory
             'identify_mark' => $this->faker->randomDigit,
             'chip_number' => $this->faker->randomDigit,
             'owner_signs' => "ошейник, шлейка",
+            'animal_signs' => "острые коготочки",
             'animal_traits_id' => AnimalTrait::factory()->create()->id,
             'municipality' => $this->faker->text,
             'place' => $this->faker->text,

@@ -2,7 +2,6 @@
     <div class="mt-10">
     <validation-observer
         ref="observer"
-        v-slot="{ invalid }"
     >
         <form @submit.prevent="submit">
             <v-container>
@@ -17,11 +16,10 @@
                                 rules="required"
                             >
                                 <v-text-field
-                                    v-model="name"
+                                    v-model="card.animal_name"
                                     :error-messages="errors"
                                     label="Кличка животного"
                                     outlined
-                                    required
                                 ></v-text-field>
                             </validation-provider>
                         </v-col>
@@ -34,7 +32,7 @@
                                 rules="required"
                             >
                                 <v-select
-                                    v-model="genderSelect"
+                                    v-model="card.gender"
                                     :items="genders"
                                     :error-messages="errors"
                                     label="Пол"
@@ -53,7 +51,7 @@
                                 rules="required"
                             >
                                 <v-select
-                                    v-model="statusSelect"
+                                    v-model="card.current_status"
                                     :items="statuses"
                                     :error-messages="errors"
                                     label="Статус"
@@ -69,14 +67,13 @@
                             <validation-provider
                                 v-slot="{ errors }"
                                 name="specialTraits"
-                                rules="required|email"
+                                rules="required"
                             >
                                 <v-text-field
-                                    v-model="specialTraits"
+                                    v-model="card.animal_signs"
                                     :error-messages="errors"
                                     label="Особые приметы"
                                     outlined
-                                    required
                                 ></v-text-field>
                             </validation-provider>
                         </v-col>
@@ -110,31 +107,32 @@
             </v-row>
             <v-row>
                 <v-col cols="4">
-                    <validation-provider
-                        v-slot="{ errors }"
-                        name="birthday"
-                        rules="required"
-                    >
                         <v-dialog
                             ref="birthdayDialog"
                             v-model="birthdayModal"
-                            :return-value.sync="birthday"
+                            :return-value.sync="card.date_birth"
                             persistent
                             width="290px"
                         >
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                    v-model="birthday"
-                                    label="Дата рождения"
-                                    prepend-icon=""
-                                    outlined
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
+                                <validation-provider
+                                    v-slot="{ errors }"
+                                    name="birthday"
+                                    rules="required"
+                                >
+                                    <v-text-field
+                                        v-model="card.date_birth"
+                                        label="Дата рождения"
+                                        prepend-icon=""
+                                        outlined
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </validation-provider>
                             </template>
                             <v-date-picker
-                                v-model="birthday"
+                                v-model="card.date_birth"
                                 scrollable
                                 :max="getNowDate()"
                                 locale="ru"
@@ -150,42 +148,47 @@
                                 <v-btn
                                     text
                                     color="primary"
-                                    @click="$refs.birthdayDialog.save(birthday)"
+                                    @click="$refs.birthdayDialog.save(card.date_birth)"
                                 >
                                     OK
                                 </v-btn>
                             </v-date-picker>
                         </v-dialog>
-                    </validation-provider>
+
                 </v-col>
                 <v-col cols="4">
-                    <validation-provider
-                        v-slot="{ errors }"
-                        name="sterilizationDate"
-                        rules="required"
-                    >
                         <v-dialog
                             ref="sterilizationDateDialog"
                             v-model="sterilizationDateModal"
-                            :return-value.sync="sterilizationDate"
+                            :return-value.sync="card.sterilisation_date"
                             persistent
                             width="290px"
                         >
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                    v-model="sterilizationDate"
-                                    label="Дата стерилизации"
-                                    prepend-icon=""
-                                    readonly
-                                    outlined
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
+
+                                <validation-provider
+                                    v-slot="{ errors }"
+                                    name="sterilizationDate"
+                                    :rules="{required: true, min_date: card.date_birth}"
+                                >
+                                    <v-text-field
+                                        v-model="card.sterilisation_date"
+                                        label="Дата стерилизации"
+                                        prepend-icon=""
+                                        readonly
+                                        :error-messages="errors"
+                                        outlined
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </validation-provider>
+
                             </template>
                             <v-date-picker
-                                v-model="sterilizationDate"
+                                v-model="card.sterilisation_date"
                                 scrollable
                                 :max="getNowDate()"
+                                :min="card.date_birth"
                                 locale="ru"
                             >
                                 <v-spacer></v-spacer>
@@ -199,42 +202,46 @@
                                 <v-btn
                                     text
                                     color="primary"
-                                    @click="$refs.sterilizationDateDialog.save(sterilizationDate)"
+                                    @click="$refs.sterilizationDateDialog.save(card.sterilisation_date)"
                                 >
                                     OK
                                 </v-btn>
                             </v-date-picker>
                         </v-dialog>
-                    </validation-provider>
+
                 </v-col>
                 <v-col cols="4">
-                    <validation-provider
-                        v-slot="{ errors }"
-                        name="vaccinationDate"
-                        rules="required"
-                    >
                         <v-dialog
                             ref="vaccinationDateDialog"
                             v-model="vaccinationDateModal"
-                            :return-value.sync="vaccinationDate"
+                            :return-value.sync="card.vaccination_date"
                             persistent
                             width="290px"
                         >
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                    v-model="vaccinationDate"
-                                    label="Дата вакцинации"
-                                    prepend-icon=""
-                                    outlined
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
+                                <validation-provider
+                                    v-slot="{ errors }"
+                                    name="vaccinationDate"
+                                    :rules="{required: true, min_date: card.date_birth}"
+                                >
+                                    <v-text-field
+                                        v-model="card.vaccination_date"
+                                        label="Дата вакцинации"
+                                        prepend-icon=""
+                                        outlined
+                                        readonly
+                                        :error-messages="errors"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </validation-provider>
                             </template>
+
                             <v-date-picker
-                                v-model="vaccinationDate"
+                                v-model="card.vaccination_date"
                                 scrollable
                                 :max="getNowDate()"
+                                :min="card.date_birth"
                                 locale="ru"
                             >
                                 <v-spacer></v-spacer>
@@ -248,13 +255,12 @@
                                 <v-btn
                                     text
                                     color="primary"
-                                    @click="$refs.vaccinationDateDialog.save(vaccinationDate)"
+                                    @click="$refs.vaccinationDateDialog.save(card.vaccination_date)"
                                 >
                                     OK
                                 </v-btn>
                             </v-date-picker>
                         </v-dialog>
-                    </validation-provider>
                 </v-col>
             </v-row>
                 <v-row>
@@ -265,11 +271,10 @@
                             rules="required"
                         >
                             <v-text-field
-                                v-model="municipal"
+                                v-model="card.municipality"
                                 :error-messages="errors"
                                 label="Муниципальное образование"
                                 outlined
-                                required
                             ></v-text-field>
                         </validation-provider>
                     </v-col>
@@ -280,11 +285,10 @@
                             rules="required"
                         >
                             <v-text-field
-                                v-model="municipalAddress"
+                                v-model="card.place"
                                 :error-messages="errors"
                                 label="Адрес образования"
                                 outlined
-                                required
                             ></v-text-field>
                         </validation-provider>
                     </v-col>
@@ -310,12 +314,11 @@
                             rules="required|min_value:1"
                         >
                             <v-text-field
-                                v-model="chipId"
+                                v-model="card.chip_number"
                                 :error-messages="errors"
                                 label="ID Чипа"
                                 type="number"
                                 outlined
-                                required
                             ></v-text-field>
                         </validation-provider>
                     </v-col>
@@ -326,12 +329,11 @@
                             rules="required|min_value:1"
                         >
                             <v-text-field
-                                v-model="markId"
+                                v-model="card.identify_mark"
                                 :error-messages="errors"
                                 label="ID Метки"
                                 type="number"
                                 outlined
-                                required
                             ></v-text-field>
                         </validation-provider>
                     </v-col>
@@ -344,16 +346,17 @@
                         ></v-file-input>
                     </v-col>
                 </v-row>
-            <v-btn
-                class="mr-4"
-                type="submit"
-                :disabled="invalid"
-            >
-                Сохранить изменения
-            </v-btn>
-            <v-btn @click="clear">
-                Очистить форму
-            </v-btn>
+                <v-btn
+                    class="mr-4"
+                    @click="backToCard(card.id)"
+                >
+                    Вернуться к карте
+                </v-btn>
+                <v-btn
+                    type="submit"
+                >
+                    Сохранить изменения
+                </v-btn>
             </v-container>
         </form>
     </validation-observer>
@@ -361,42 +364,8 @@
 </template>
 
 <script>
-
-import { required, digits, email, max, regex, min_value } from 'vee-validate/dist/rules'
-import { extend, setInteractionMode } from 'vee-validate'
 import usages from "../../mixins/usages";
-
-setInteractionMode('eager')
-
-extend('digits', {
-    ...digits,
-    message: '{_field_} needs to be {length} digits. ({_value_})',
-})
-
-extend('required', {
-    ...required,
-    message: 'Данное поле должно быть заполнено',
-})
-
-extend('max', {
-    ...max,
-    message: '{_field_} may not be greater than {length} characters',
-})
-
-extend('regex', {
-    ...regex,
-    message: '{_field_} {_value_} does not match {regex}',
-})
-
-extend('email', {
-    ...email,
-    message: 'Email must be valid',
-})
-
-extend('min_value', {
-    ...min_value,
-    message: 'Значение поле не может быть меньше чем {min}',
-})
+import Swal from 'sweetalert2'
 
 export default {
     name: "EditCard.vue",
@@ -409,64 +378,118 @@ export default {
     },
     data() {
         return {
-            name: '',
-            specialTraits: '',
-            birthday: null,
-            sterilizationDate: null,
-            vaccinationDate: null,
-            municipal:'',
-            municipalAddress: '',
-            chipId: null,
-            markId: null,
             birthdayModal: false,
             sterilizationDateModal: false,
             vaccinationDateModal: false,
-            genderSelect: null,
-            statusSelect: null,
-            ownerTraitsSelect: ['Ошейник', 'Шлейка'],
+            ownerTraitsSelect: null,
             ownerTraits: [
-                'Ошейник',
-                'Шлейка',
-                'Одежда',
-                'Чип',
+                {
+                    value: 'ошейник',
+                    text: 'Ошейник'
+                },
+                {
+                    value: 'шлейка',
+                    text: 'Шлейка'
+                },
+                {
+                    value: 'одежда',
+                    text: 'Одежда'
+                },
+                {
+                    value: 'чип',
+                    text: 'Чип'
+                }
             ],
             genders: [
-                'Мужской',
-                'Женский',
+                {
+                    value: true,
+                    text: 'Женский'
+                },
+                {
+                    value: false,
+                    text: 'Мужской'
+                }
             ],
             statuses: [
-                'В приюте',
-                'Выбыл',
+                {
+                    value: true,
+                    text: 'В приюте'
+                },
+                {
+                    value: false,
+                    text: 'Выбыл'
+                }
             ]
         }
     },
+    created() {
+        console.log(this.card);
+        if(this.card.owner_signs !== 'Нет черт')
+            this.ownerTraitsSelect = this.card.owner_signs.split(', ').map((el) => {
+                return {
+                    value: el,
+                    text: this.ownerTraits.find((trait) => {
+                        if(trait.value === el)
+                            return trait
+                    })['text']
+                }
+            });
+
+    },
+    mounted() {
+    },
     methods: {
         submit () {
-            this.$refs.observer.validate()
+            console.log(this.$refs.observer.validate())
+            if(this.$refs.observer.validate()) {
+                if(this.ownerTraitsSelect.length > 0) {
+                    this.card.owner_signs = this.ownerTraitsSelect.map((el) => {
+                        return el.value
+                    });
+                    this.card.owner_signs = this.card.owner_signs.join(", ");
+                }
+                else
+                    this.card.owner_signs = 'Нет черт';
+
+                Swal.fire({
+                    title: 'Вы уверены?',
+                    text: "Все внесенные изменения будут сохранены",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Да',
+                    cancelButtonText: 'Нет'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let cardId = this.card.id
+                        axios.put('/register/card/' + cardId, this.card)
+                            .then(function (response) {
+                                if(response.status === 200) {
+
+                                    Swal.fire({
+                                            title: 'Обновлено!',
+                                            text: 'Значения карты были изменены',
+                                            icon: 'success',
+                                            allowOutsideClick: false
+                                        }).then(() => {
+                                        window.location.href = '/register/card/show/'+cardId;
+                                    })
+                                }
+                            })
+                    }
+                })
+            }
         },
-        clear () {
-            this.name = '';
-            this.specialTraits = '';
-            this.birthday= null;
-            this.sterilizationDate = null;
-            this.vaccinationDate = null;
-            this.municipal = '';
-            this.municipalAddress =  '';
-            this.chipId = null;
-            this.markId = null;
-            this.genderSelect = null;
-            this.statusSelect = null;
-            this.ownerTraitsSelect = [];
-            this.$refs.observer.reset()
-        },
+        backToCard(id) {
+            window.location.href = '/register/card/show/'+id;
+        }
     },
 }
 </script>
 
 <style scoped>
-.card-form {
-    height: 80%;
-    width: 80%;
-    margin-top: 20px;
+.swal2-popup {
+    font-family: sans-serif;
 }
 </style>

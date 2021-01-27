@@ -17,7 +17,7 @@ class CreateAnimalTraitsTable extends Migration
             $table->id();
             $table->enum('size',['big','medium','small']);
             $table->enum('category',['cat','dog']);
-            $table->enum('wool',['short_wool','long_wool', 'hard_wool', 'сurly_wool']);
+            $table->enum('wool',['short_wool','long_wool', 'hard_wool', 'curly_wool']);
             $table->timestamps();
         });
     }

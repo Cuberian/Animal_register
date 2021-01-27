@@ -46,6 +46,18 @@
                 >
                     открыть
                 </v-btn>
+                <v-btn
+                    rounded
+                    outlined
+                    color="error"
+                    fab
+                    small
+                    @click="deleteCard(card.id)"
+                >
+                    <v-icon>
+                        {{ mdiDelete }}
+                    </v-icon>
+                </v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -53,7 +65,11 @@
 </template>
 
 <script>
+import {
+    mdiDelete,
+} from '@mdi/js'
 import usages from "../../mixins/usages";
+import Swal from "sweetalert2";
 export default {
     name: "Register",
     mixins: [usages],
@@ -65,6 +81,7 @@ export default {
     },
     data() {
         return {
+            mdiDelete,
             reveal: false
         }
     },
@@ -87,6 +104,37 @@ export default {
             }
             else
                 return imageString;
+        },
+        deleteCard(id) {
+
+            Swal.fire({
+                title: 'Вы уверены?',
+                text: "Текущая карта будет удалена",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Да',
+                cancelButtonText: 'Нет'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    axios.delete('/register/card/' + id)
+                        .then(function (response) {
+                            if (response.status === 200) {
+
+                                Swal.fire({
+                                    title: 'Удалено!',
+                                    text: 'Текущая карта удалена',
+                                    icon: 'success',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    window.location.href='/register';
+                                })
+                            }
+                        })
+                }
+            })
         }
     }
 }

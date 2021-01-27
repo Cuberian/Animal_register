@@ -19,5 +19,8 @@ Route::group(['prefix' => 'register','as' => 'card.'], function () {
     Route::get('/', [RegisterController::class, 'PrintRegister']);
     Route::get('/card/show/{id}', [RegisterController::class, 'OpenCard']);
     Route::get('/card/create', [RegisterController::class, 'CreateCard']);
+    Route::post('/card/store', [RegisterController::class, 'StoreCard']);
     Route::get('/card/{id}/edit', [RegisterController::class, 'EditCard']);
+    Route::put('/card/{id}',[RegisterController::class, 'UpdateCard']);
+    Route::delete('/card/{id}',[RegisterController::class, 'DeleteCard']);
 });

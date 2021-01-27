@@ -9,6 +9,8 @@ class Card extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id', 'animal_traits'];
+
     protected $appends = ['animal_traits'];
 
     public function getAnimalTraitsAttribute()

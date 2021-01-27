@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnimalTrait;
 use App\Models\Card;
 use Illuminate\Http\Request;
 
@@ -19,14 +20,17 @@ class CardsRegister extends Controller
     static function GetCardByID(int $id) {
         return Card::where('id', $id)->first();
     }
+
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param array $input
      */
-    public function create()
+    static function AddCard(array $input)
     {
-        //
+        $animal_traits = AnimalTrait::create($input['animal_traits']);
+        $input['animal_traits_id'] = $animal_traits['id'];
+        $id = Card::create($input)->id;
+        return response()->json(['id' => $id], 200);
     }
 
     /**

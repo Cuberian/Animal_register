@@ -6,6 +6,10 @@
         >
             <v-toolbar-title>Единый реестр животных</v-toolbar-title>
 
+                <v-btn text class="ml-10 mt-1" href="/register">
+                    Реестр
+                </v-btn>
+
             <v-spacer></v-spacer>
             <v-btn icon>
                 <v-avatar

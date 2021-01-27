@@ -23,7 +23,7 @@ class AnimalTraitFactory extends Factory
         return [
         'size' => $this->faker->randomElement(['big','medium','small']),
         'category' => $this->faker->randomElement(['cat','dog']),
-        'wool' => $this->faker->randomElement(['short_wool','long_wool', 'hard_wool', 'сurly_wool'])
+        'wool' => $this->faker->randomElement(['short_wool','long_wool', 'hard_wool', 'curly_wool'])
         ];
     }
 }

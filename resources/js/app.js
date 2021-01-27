@@ -22,6 +22,55 @@ window.Vue = require('vue').default;
 import {  ValidationProvider, ValidationObserver } from 'vee-validate';
 
 import vuetify from './plugins/vuetify'
+import 'sweetalert2/src/sweetalert2.scss'
+
+import { required, digits, email, max, regex, min_value } from 'vee-validate/dist/rules'
+import { extend, setInteractionMode } from 'vee-validate'
+
+setInteractionMode('eager')
+
+extend('digits', {
+    ...digits,
+    message: '{_field_} needs to be {length} digits. ({_value_})',
+})
+
+extend('required', {
+    ...required,
+    message: 'Данное поле должно быть заполнено',
+})
+
+extend('max', {
+    ...max,
+    message: '{_field_} may not be greater than {length} characters',
+})
+
+extend('regex', {
+    ...regex,
+    message: '{_field_} {_value_} does not match {regex}',
+})
+
+extend('email', {
+    ...email,
+    message: 'Email must be valid',
+})
+
+extend('min_value', {
+    ...min_value,
+    message: 'Значение поле не может быть меньше чем {min}',
+})
+
+extend('min_date', {
+    validate(value, args) {
+        console.log('Im here');
+        let d_value = new Date(value)
+        let d_min = new Date(args.min)
+        console.log(d_value);
+        console.log(d_min);
+        return d_value >= d_min;
+    },
+    params: ['min'],
+    message: 'Дата не может быть установлена раньше чем {min}'
+});
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
