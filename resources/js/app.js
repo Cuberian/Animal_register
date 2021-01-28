@@ -18,11 +18,12 @@ window.Vue = require('vue').default;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+import store from "./store"
 
 import {  ValidationProvider, ValidationObserver } from 'vee-validate';
 
-import vuetify from './plugins/vuetify'
-import 'sweetalert2/src/sweetalert2.scss'
+import vuetify from './plugins/vuetify';
+import 'sweetalert2/src/sweetalert2.scss';
 
 import { required, digits, email, max, regex, min_value } from 'vee-validate/dist/rules'
 import { extend, setInteractionMode } from 'vee-validate'
@@ -80,6 +81,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('add-card', require('./components/Card/AddCard.vue').default);
 Vue.component('edit-card', require('./components/Card/EditCard.vue').default);
 Vue.component('animal-card', require('./components/Card/ShowCard.vue').default);
+
+Vue.component('login-component', require('./components/Auth/Login.vue').default);
+Vue.component('register-component', require('./components/Auth/Register.vue').default);
 
 Vue.component('register', require('./components/Register/Register.vue').default);
 

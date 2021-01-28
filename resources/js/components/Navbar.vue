@@ -24,8 +24,30 @@
 </template>
 
 <script>
+import User from "../apis/User";
+import { mapState } from "vuex";
 export default {
-    name: "Navbar"
+    name: "Navbar",
+    computed: {
+        ...mapState({
+            user: state => state.auth.user
+        })
+    },
+
+    mounted() {
+        User.auth().then((response) => {
+                this.$store.commit('AUTH_USER', response.data)
+        });
+    },
+
+    methods: {
+        logout() {
+            User.logout().then(() => {
+                localStorage.removeItem('token');
+                this.$store.commit('LOGIN', false);
+            })
+        }
+    }
 }
 </script>
 

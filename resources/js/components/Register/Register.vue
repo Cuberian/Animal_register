@@ -49,6 +49,18 @@
                 <v-btn
                     rounded
                     outlined
+                    color="success"
+                    fab
+                    small
+                    @click="editCard(card.id)"
+                >
+                    <v-icon>
+                        mdi-pencil
+                    </v-icon>
+                </v-btn>
+                <v-btn
+                    rounded
+                    outlined
                     color="error"
                     fab
                     small
@@ -96,6 +108,9 @@ export default {
         },
         createCard() {
             window.location.href = '/register/card/create';
+        },
+        editCard(id) {
+            window.location.href = '/register/card/' + id + '/edit';
         },
         setAvatarImage(imageString, category) {
             console.log(imageString)
