@@ -1,6 +1,7 @@
 <template>
     <div>
     <v-btn
+        v-if="isLoggedIn && getRole.change_access"
         rounded
         color="success"
         class="mt-4 ml-2"
@@ -46,30 +47,48 @@
                 >
                     открыть
                 </v-btn>
-                <v-btn
-                    rounded
-                    outlined
-                    color="success"
-                    fab
-                    small
-                    @click="editCard(card.id)"
-                >
-                    <v-icon>
-                        mdi-pencil
-                    </v-icon>
-                </v-btn>
-                <v-btn
-                    rounded
-                    outlined
-                    color="error"
-                    fab
-                    small
-                    @click="deleteCard(card.id)"
-                >
-                    <v-icon>
-                        {{ mdiDelete }}
-                    </v-icon>
-                </v-btn>
+                <template v-if="isLoggedIn && getRole.change_access">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                class="ml-2"
+                                rounded
+                                outlined
+                                color="success"
+                                fab
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="editCard(card.id)"
+                            >
+                                <v-icon>
+                                    mdi-pencil
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Изменить данные</span>
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                class="ml-2"
+                                rounded
+                                outlined
+                                color="error"
+                                fab
+                                small
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="deleteCard(card.id)"
+                            >
+                                <v-icon>
+                                    {{ mdiDelete }}
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Удалить</span>
+                    </v-tooltip>
+                </template>
             </v-card-actions>
         </v-card>
     </div>
@@ -82,6 +101,10 @@ import {
 } from '@mdi/js'
 import usages from "../../mixins/usages";
 import Swal from "sweetalert2";
+import { mapGetters } from "vuex";
+import LoginActions from "../../apis/LoginActions";
+
+
 export default {
     name: "Register",
     mixins: [usages],
@@ -97,59 +120,60 @@ export default {
             reveal: false
         }
     },
-    mounted() {
-        console.log(this.cards)
-        console.log(this.cards[0].animalTraits)
+
+    computed: {
+        ...mapGetters(['isLoggedIn', 'getRole'])
     },
 
     methods: {
         openCard(id) {
-            window.location.href = '/register/card/show/'+id;
+            window.location.href = '/register/card/show/' + id + this.getToken();
         },
         createCard() {
-            window.location.href = '/register/card/create';
+            window.location.href = '/register/card/create' + this.getToken();
         },
         editCard(id) {
-            window.location.href = '/register/card/' + id + '/edit';
+            window.location.href = '/register/card/' + id + '/edit'+ this.getToken();
         },
         setAvatarImage(imageString, category) {
             console.log(imageString)
-            if(imageString !== null) {
+            if(imageString === null || imageString === '' ) {
                return category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg';
             }
             else
                 return imageString;
         },
         deleteCard(id) {
+            if(this.isLoggedIn && this.getRole.change_access) {
+                Swal.fire({
+                    title: 'Вы уверены?',
+                    text: "Текущая карта будет удалена",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Да',
+                    cancelButtonText: 'Нет'
+                }).then((result) => {
 
-            Swal.fire({
-                title: 'Вы уверены?',
-                text: "Текущая карта будет удалена",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Да',
-                cancelButtonText: 'Нет'
-            }).then((result) => {
+                    if (result.isConfirmed) {
+                        LoginActions.deleteCard(id)
+                            .then(function (response) {
+                                if (response.status === 200) {
 
-                if (result.isConfirmed) {
-                    axios.delete('/register/card/' + id)
-                        .then(function (response) {
-                            if (response.status === 200) {
-
-                                Swal.fire({
-                                    title: 'Удалено!',
-                                    text: 'Текущая карта удалена',
-                                    icon: 'success',
-                                    allowOutsideClick: false
-                                }).then(() => {
-                                    window.location.href='/register';
-                                })
-                            }
-                        })
-                }
-            })
+                                    Swal.fire({
+                                        title: 'Удалено!',
+                                        text: 'Текущая карта удалена',
+                                        icon: 'success',
+                                        allowOutsideClick: false
+                                    }).then(() => {
+                                        window.location.href = '/register';
+                                    })
+                                }
+                            })
+                    }
+                })
+            }
         }
     }
 }

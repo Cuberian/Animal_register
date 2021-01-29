@@ -22,11 +22,17 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
 
 
 Route::group(['prefix' => 'register','as' => 'card.'], function () {
-    Route::get('/', [RegisterController::class, 'PrintRegister']);
+
+    Route::get('/public', [RegisterController::class, 'PrintPublicRegister'])->name('public_register');
     Route::get('/card/show/{id}', [RegisterController::class, 'OpenCard']);
-    Route::get('/card/create', [RegisterController::class, 'CreateCard']);
-    Route::post('/card/store', [RegisterController::class, 'StoreCard']);
-    Route::get('/card/{id}/edit', [RegisterController::class, 'EditCard']);
-    Route::put('/card/{id}',[RegisterController::class, 'UpdateCard']);
-    Route::delete('/card/{id}',[RegisterController::class, 'DeleteCard']);
+        Route::middleware('auth:api')->group(function () {
+            Route::get('/', [RegisterController::class, 'PrintRegister']);
+            Route::middleware('checkRole')->group(function () {
+                Route::get('/card/create', [RegisterController::class, 'CreateCard']);
+                Route::get('/card/{id}/edit', [RegisterController::class, 'EditCard']);
+                Route::post('/card/store', [RegisterController::class, 'StoreCard']);
+                Route::put('/card/{id}', [RegisterController::class, 'UpdateCard']);
+                Route::delete('/card/{id}', [RegisterController::class, 'DeleteCard']);
+            });
+        });
 });

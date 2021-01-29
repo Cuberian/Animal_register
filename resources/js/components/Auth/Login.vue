@@ -61,9 +61,27 @@ export default {
     },
     methods: {
         submit() {
-            axios.post('/api/user/login', this.userObj).then((response) => {
-                window.localStorage.setItem('token', response.data.access_token);
-                this.$store.commit('LOGIN', true);
+            Swal.fire({
+                title: 'Проверяем лапки',
+                html: `<img src="/img/346.gif"/>`,
+                show: true,
+                didOpen: () => {
+                    console.log( this.userObj);
+                    return axios.post('/api/user/login', this.userObj)
+                        .then((response) => {
+                            window.localStorage.setItem('token', response.data);
+                            document.cookie=`access_token=[${response.data}]`;
+                            this.$store.commit('LOGIN', true);
+                            Swal.close();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Ошибка авторизации: ${error}`
+                            )
+                        })
+                },
+                allowOutsideClick: false
+            }).then(() => {
                 Swal.fire({
                     title: 'Успешно!',
                     text: 'Вы авторизировались',
@@ -72,7 +90,7 @@ export default {
                 }).then(() => {
                     window.location.href = '/register';
                 })
-            });
+            })
         }
     }
 }

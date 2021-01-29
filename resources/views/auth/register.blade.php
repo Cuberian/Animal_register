@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content-body')
-    <register></register>
+    <register-component></register-component>
 @endsection

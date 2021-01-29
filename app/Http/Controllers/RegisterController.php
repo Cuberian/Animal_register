@@ -12,6 +12,10 @@ class RegisterController extends Controller
         $cards = CardsRegister::GetCards();
         return view('register.register', compact('cards'));
     }
+    function PrintPublicRegister() {
+        $cards = PublicCircuit::GetCards();
+        return view('register.public_register', compact('cards'));
+    }
 
     function OpenCard(int $id) {
         $card = CardsRegister::GetCardByID($id);

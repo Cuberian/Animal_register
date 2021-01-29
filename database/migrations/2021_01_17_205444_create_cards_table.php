@@ -31,6 +31,7 @@ class CreateCardsTable extends Migration
             $table->string('sterilisation_date');
             $table->date('vaccination_date');
             $table->boolean('current_status');
+            $table->boolean('publicity_status');
             $table->date('change_status_date');
             $table->timestamps();
         });

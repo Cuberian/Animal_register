@@ -5,9 +5,9 @@
             rounded
             color="success"
             class="mt-4 ml-2"
-            @click="backToRegister()"
+            @click="backToRegister(card.publicity_status)"
         >
-            Вернуться к реестру
+            Вернуться к{{card.publicity_status ? ' публичному ' : ' '}}реестру
         </v-btn>
             <v-row class="mt-4">
                 <v-col cols="3">
@@ -30,7 +30,7 @@
                             <h1 class="mb-0">{{ card.animal_name }}</h1>
                             <p class="text--subtitle">{{ card.animal_traits.category === 'cat' ? 'Кошка' : 'Собака' }} </p>
                         </v-col>
-                        <v-col cols="2" class="text-end">
+                        <v-col cols="2" class="text-end" v-if="isLoggedIn && getRole.change_access">
                             <v-btn
                                 class="mx-2"
                                 fab
@@ -44,7 +44,7 @@
                                 </v-icon>
                             </v-btn>
                         </v-col>
-                        <v-col cols="2" class="text-start">
+                        <v-col cols="2" class="text-start" v-if="isLoggedIn && getRole.change_access">
                             <v-btn
                                 class="mx-2"
                                 fab
@@ -253,6 +253,8 @@ import {
 import usages from '../../mixins/usages';
 import localization from "../../mixins/localization";
 import Swal from "sweetalert2";
+import { mapGetters } from "vuex";
+import LoginActions from "../../apis/LoginActions";
 
 export default {
     name: "Card",
@@ -269,15 +271,24 @@ export default {
             tab: null
         }
     },
+    computed: {
+        ...mapGetters(['isLoggedIn','getRole'])
+    },
+
     mounted() {
         console.log(this.card);
     },
     methods: {
+        backToRegister(status) {
+            if(status)
+                window.location.href = '/register/public';
+            else
+                window.location.href = '/register' + this.getToken();
+        },
         editCard(id) {
-            window.location.href = '/register/card/' + id + '/edit';
+            window.location.href = '/register/card/' + id + '/edit' + this.getToken();
         },
         deleteCard(id) {
-
             Swal.fire({
                 title: 'Вы уверены?',
                 text: "Текущая карта будет удалена",
@@ -289,9 +300,9 @@ export default {
                 cancelButtonText: 'Нет'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete('/register/card/' + id)
+                    LoginActions.deleteCard(id)
                         .then(function (response) {
-                            if(response.status === 200) {
+                            if (response.status === 200) {
 
                                 Swal.fire({
                                     title: 'Удалено!',
@@ -305,10 +316,6 @@ export default {
                         })
                 }
             })
-
-
-
-
         }
     }
 }

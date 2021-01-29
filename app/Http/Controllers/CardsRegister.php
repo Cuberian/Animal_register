@@ -14,7 +14,7 @@ class CardsRegister extends Controller
      * @return Card[]|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     static function GetCards() {
-        return Card::all();
+        return Card::where('publicity_status', false)->get();
     }
 
     static function GetCardByID(int $id) {

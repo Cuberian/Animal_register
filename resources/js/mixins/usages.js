@@ -1,5 +1,10 @@
 export default {
     methods: {
+        getToken() {
+            let token = localStorage.getItem('token');
+            return token ? `?access_token=${token}` : '';
+        },
+
         getNowDate() {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, '0');
@@ -36,9 +41,6 @@ export default {
             }
             return sizes[traits.size] + ', ' + wools[traits.wool]
         },
-        backToRegister() {
-            window.location.href = '/register';
-        }
     }
 }
 

@@ -416,7 +416,9 @@
 
 <script>
 import usages from "../../mixins/usages";
+import { mapGetters } from "vuex";
 import Swal from 'sweetalert2'
+import LoginActions from "../../apis/LoginActions";
 
 export default {
     name: "AddCard.vue",
@@ -529,6 +531,9 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapGetters(['isLoggedIn', 'getRole'])
+    },
     methods: {
         submit () {
             console.log(this.$refs.observer.validate())
@@ -547,6 +552,7 @@ export default {
 
                     this.cardObj.change_status_date = this.getNowDate();
 
+
                     Swal.fire({
                         title: 'Вы уверены?',
                         text: "Будет соэдана новая карта животного",
@@ -558,21 +564,39 @@ export default {
                         cancelButtonText: 'Нет'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            axios.post('/register/card/store',this.cardObj)
-                                .then(function (response) {
-                                    if(response.status === 200) {
-                                        let resObj = response.data;
-                                        console.log(resObj);
-                                        Swal.fire({
-                                            title: 'Создано!',
-                                            text: 'Создана новая карта',
-                                            icon: 'success',
-                                            allowOutsideClick: false
-                                        }).then(() => {
-                                            window.location.href = '/register/card/show/'+resObj.id;
+                            let resObj = null
+
+                            Swal.fire({
+                                title: 'Проверяем лапки',
+                                html: `<img src="/img/346.gif"/>`,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    LoginActions.storeCard(this.cardObj)
+                                        .then((response) => {
+                                            if (response.status === 200) {
+                                                resObj = response.data;
+                                                Swal.close();
+                                            }
                                         })
-                                    }
+                                        .catch(error => {
+                                            Swal.showValidationMessage(
+                                                `Ошибка добавления: ${error}`
+                                            )
+                                        })
+                                },
+                                allowOutsideClick: false
+                            }).then(function () {
+                                Swal.fire({
+                                    title: 'Создано!',
+                                    text: 'Создана новая карта',
+                                    icon: 'success',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    window.location.href = '/register/card/show/'+resObj.id;
                                 })
+                            })
+
+
                         }
                     })
                 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -15,18 +17,21 @@ class LoginController extends Controller
             'password' => 'required|string'
         ]);
 
-        if( !Auth::attempt( $login ) ) {
-            return response(['message' => 'Invalid login credentials.']);
+        $user = User::where('email', $request->email)->first();
+
+        if( !$user || !Hash::check($request->password, $user->password) ) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect']
+            ]);
         }
 
-        $accessToken = Auth::user()->createToken('authToken')->accessToken;
-
-        return response(['user' => Auth::user(), 'access_token' => $accessToken]);
+        return  $user->createToken('authToken')->accessToken;
     }
 
     public function register(Request $request) {
-        $register = $request->validate([
+        $request->validate([
             'name' => 'required',
+            'role_id' => 1,
             'email' => 'required|email',
             'password' => 'required|string'
         ]);
@@ -34,13 +39,9 @@ class LoginController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
 
-        $user = User::create($input);
+        $new_user = User::create($input);
 
-        $responseArray = [];
-        $responseArray['access_token'] = $user->createToken('authToken')->accessToken;
-        $responseArray['user'] = $user;
-
-        return response()->json($responseArray, 200);
+        return $new_user->createToken('authToken')->accessToken;
     }
 
     public function logout() {

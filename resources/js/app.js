@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+
 window.Vue = require('vue').default;
 
 /**
@@ -78,6 +79,8 @@ Vue.component('ValidationObserver', ValidationObserver);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+Vue.component('app', require('./components/App.vue').default);
+
 Vue.component('add-card', require('./components/Card/AddCard.vue').default);
 Vue.component('edit-card', require('./components/Card/EditCard.vue').default);
 Vue.component('animal-card', require('./components/Card/ShowCard.vue').default);
@@ -86,9 +89,11 @@ Vue.component('login-component', require('./components/Auth/Login.vue').default)
 Vue.component('register-component', require('./components/Auth/Register.vue').default);
 
 Vue.component('register', require('./components/Register/Register.vue').default);
+Vue.component('public-register', require('./components/Register/PublicRegister').default);
 
 Vue.component('navbar', require('./components/Navbar.vue').default);
 
+Vue.component('navbar', require('./components/Navbar.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -97,5 +102,7 @@ Vue.component('navbar', require('./components/Navbar.vue').default);
 
 const app = new Vue({
     el: '#app',
-    vuetify
+    vuetify,
+    store
 });
+

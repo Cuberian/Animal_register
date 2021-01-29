@@ -6,23 +6,27 @@ export default new Vuex.Store({
     state: {
         auth: {
             login: false,
-            user: []
+            role: {},
+            user: {}
         },
     },
 
     getters: {
        isLoggedIn(state) {
            return state.auth.login;
+       },
+       getRole(state) {
+         return state.auth.role;
        }
     },
 
     mutations: {
         LOGIN(state, status) {
             state.auth.login = status;
-            state.auth.user = [];
         },
         AUTH_USER(state, user) {
             state.auth.user = user;
+            state.auth.role = user.role;
         }
     },
 

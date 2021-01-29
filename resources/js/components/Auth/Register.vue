@@ -1,6 +1,7 @@
 <template>
     <v-container class="d-flex" style="height: 100%;">
         <v-card elevation="2" style="padding: 20px; width:60%;" class="justify-content-center align-self-center mx-auto">
+            <h1 class="text-center mb-4">Регистрация</h1>
             <validation-observer
                 ref="observer"
                 v-slot="{ invalid }"
@@ -27,6 +28,7 @@
                         <v-text-field
                             v-model="userObj.email"
                             :error-messages="errors"
+                            outlined
                             label="E-mail"
                             required
                         ></v-text-field>
@@ -39,6 +41,7 @@
                         <v-text-field
                             v-model="userObj.password"
                             :error-messages="errors"
+                            outlined
                             label="Пароль"
                             required
                         ></v-text-field>
@@ -57,6 +60,8 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 export default {
     name: "Register",
     data() {
@@ -70,17 +75,35 @@ export default {
     },
     methods: {
         submit() {
-            axios.post('/api/user/register', this.userObj).then((response) => {
-                window.localStorage.setItem('token', response.data.access_token);
+            Swal.fire({
+                title: 'Waiting',
+                html: `<img src="/img/346.gif"/>`,
+                show: true,
+                didOpen: () => {
+                    return axios.post('/api/user/register', this.userObj)
+                        .then((response) => {
+                            window.localStorage.setItem('token', response.data);
+                            document.cookie=`access_token=${response.data}`;
+                            this.$store.commit('LOGIN', true);
+                            Swal.close();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Ошибка авторизации: ${error}`
+                            )
+                        })
+                },
+                allowOutsideClick: false
+            }).then(() => {
                 Swal.fire({
                     title: 'Успешно!',
-                    text: 'Вы авторизировались',
+                    text: 'Вы зарегистрированы',
                     icon: 'success',
                     allowOutsideClick: false
                 }).then(() => {
                     window.location.href = '/register';
                 })
-            });
+            })
         }
     }
 }

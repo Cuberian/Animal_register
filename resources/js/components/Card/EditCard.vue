@@ -365,7 +365,9 @@
 
 <script>
 import usages from "../../mixins/usages";
+import LoginActions from "../../apis/LoginActions";
 import Swal from 'sweetalert2'
+import {mapGetters} from "vuex";
 
 export default {
     name: "EditCard.vue",
@@ -422,6 +424,9 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapGetters(['isLoggedIn', 'getRole'])
+    },
     created() {
         console.log(this.card);
         if(this.card.owner_signs !== 'Нет черт')
@@ -436,53 +441,69 @@ export default {
             });
 
     },
-    mounted() {
-    },
     methods: {
         submit () {
             console.log(this.$refs.observer.validate())
-            if(this.$refs.observer.validate()) {
-                if(this.ownerTraitsSelect.length > 0) {
-                    this.card.owner_signs = this.ownerTraitsSelect.map((el) => {
-                        return el.value
-                    });
-                    this.card.owner_signs = this.card.owner_signs.join(", ");
-                }
-                else
-                    this.card.owner_signs = 'Нет черт';
+            this.$refs.observer.validate().then((result) => {
+                if (result) {
+                    if (this.ownerTraitsSelect.length > 0) {
+                        this.card.owner_signs = this.ownerTraitsSelect.map((el) => {
+                            return el.value
+                        });
+                        this.card.owner_signs = this.card.owner_signs.join(", ");
+                    } else
+                        this.card.owner_signs = 'Нет черт';
 
-                Swal.fire({
-                    title: 'Вы уверены?',
-                    text: "Все внесенные изменения будут сохранены",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Да',
-                    cancelButtonText: 'Нет'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let cardId = this.card.id
-                        axios.put('/register/card/' + cardId, this.card)
-                            .then(function (response) {
-                                if(response.status === 200) {
+                    Swal.fire({
+                        title: 'Вы уверены?',
+                        text: "Все внесенные изменения будут сохранены",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Да',
+                        cancelButtonText: 'Нет'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let cardId = this.card.id
 
-                                    Swal.fire({
-                                            title: 'Обновлено!',
-                                            text: 'Значения карты были изменены',
-                                            icon: 'success',
-                                            allowOutsideClick: false
-                                        }).then(() => {
-                                        window.location.href = '/register/card/show/'+cardId;
-                                    })
-                                }
+                            Swal.fire({
+                                title: 'Проверяем лапки',
+                                html: `<img src="/img/346.gif"/>`,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    LoginActions.editCard(cardId, this.card)
+                                        .then((response) => {
+                                            if (response.status === 200) {
+                                                Swal.close();
+                                            }
+                                        })
+                                        .catch(error => {
+                                            Swal.showValidationMessage(
+                                                `Ошибка редактирования: ${error}`
+                                            )
+                                        })
+                                },
+                                allowOutsideClick: false
+                            }).then(function () {
+                                Swal.fire({
+                                    title: 'Обновлено!',
+                                    text: 'Значения карты были изменены',
+                                    icon: 'success',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    window.location.href = '/register/card/show/' + cardId;
+                                })
                             })
-                    }
-                })
-            }
+
+
+                        }
+                    })
+                }
+            });
         },
         backToCard(id) {
-            window.location.href = '/register/card/show/'+id;
+            window.location.href = '/register/card/show/'+id + this.getToken();
         }
     },
 }
