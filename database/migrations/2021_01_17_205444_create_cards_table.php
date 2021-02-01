@@ -26,8 +26,9 @@ class CreateCardsTable extends Migration
             $table->string('animal_signs');
             $table->string('municipality');
             $table->string('place');
-            $table->string('picture')->nullable();
-            $table->string('scan_frame')->nullable();
+            $table->longText('picture')->nullable();
+            $table->string('scan_frame_name')->nullable();
+            $table->longText('scan_frame')->nullable();
             $table->string('sterilisation_date');
             $table->date('vaccination_date');
             $table->boolean('current_status');

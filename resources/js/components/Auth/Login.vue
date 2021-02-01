@@ -64,7 +64,8 @@ export default {
             Swal.fire({
                 title: 'Проверяем лапки',
                 html: `<img src="/img/346.gif"/>`,
-                show: true,
+                showConfirmButton: false,
+                allowOutsideClick: false,
                 didOpen: () => {
                     console.log( this.userObj);
                     return axios.post('/api/user/login', this.userObj)
@@ -80,7 +81,6 @@ export default {
                             )
                         })
                 },
-                allowOutsideClick: false
             }).then(() => {
                 Swal.fire({
                     title: 'Успешно!',

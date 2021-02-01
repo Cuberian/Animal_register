@@ -78,7 +78,8 @@ export default {
             Swal.fire({
                 title: 'Waiting',
                 html: `<img src="/img/346.gif"/>`,
-                show: true,
+                showConfirmButton: false,
+                allowOutsideClick: false,
                 didOpen: () => {
                     return axios.post('/api/user/register', this.userObj)
                         .then((response) => {
@@ -92,8 +93,7 @@ export default {
                                 `Ошибка авторизации: ${error}`
                             )
                         })
-                },
-                allowOutsideClick: false
+                }
             }).then(() => {
                 Swal.fire({
                     title: 'Успешно!',

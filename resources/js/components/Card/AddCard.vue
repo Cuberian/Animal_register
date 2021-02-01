@@ -86,10 +86,10 @@
                                     <v-col>
                                         <v-img
                                             lazy-src="https://picsum.photos/id/11/10/6"
-                                            max-height="95%"
-                                            max-width="95%"
+                                            height="300"
+                                            width="300"
                                             class="mx-auto"
-                                            src="https://picsum.photos/id/11/500/300"
+                                            :src="setAvatarImage"
                                         ></v-img>
                                     </v-col>
                                 </v-row>
@@ -98,6 +98,8 @@
                                         <div class="mx-auto" style="max-width: 95%">
                                             <v-file-input
                                                 label="Изображение"
+                                                v-model="pictureFile"
+                                                @change="convertImageToBase64String()"
                                                 outlined
                                             ></v-file-input>
                                         </div>
@@ -393,6 +395,8 @@
                         <v-col cols="12">
                             <v-file-input
                                 label="Акт возврата животного без владельцев в прежнее место обитания"
+                                v-model="scan_frame_file"
+                                @change="convertDocToBase64String()"
                                 outlined
                             ></v-file-input>
                         </v-col>
@@ -441,9 +445,14 @@ export default {
                     wool: 'short_wool',
                     category: 'cat',
                     size: 'medium',
-                }
+                },
+                publicity_status: false
             },
+            isDefaultAvatar: false,
+            pictureFile: null,
             picture: null,
+            scan_frame_name:null,
+            scan_frame_file: null,
             scan_frame: null,
             ownerTraitsSelect: null,
             birthdayModal: false,
@@ -532,9 +541,76 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['isLoggedIn', 'getRole'])
+        ...mapGetters(['isLoggedIn', 'getRole']),
+        setAvatarImage() {
+            if(this.picture !== null && this.picture.trim() !== '')
+            {
+                this.isDefaultAvatar = false;
+                return 'data:image/png;base64, ' + this.picture;
+            }
+            else {
+                this.isDefaultAvatar =  true;
+                return this.cardObj.animal_traits.category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg'
+            }
+        }
     },
     methods: {
+        convertImageToBase64String() {
+            // get a reference to the file
+            const file = this.pictureFile;
+            if(!file)
+            {
+                this.picture = null;
+            }
+            else {
+                // encode the file using the FileReader API
+                const reader = new FileReader();
+                reader.onloadend = () => {
+
+                    // use a regex to remove data url part
+                    const base64String = reader.result
+                        .replace('data:', '')
+                        .replace(/^.+,/, '');
+
+                    // log to console
+                    // logs wL2dvYWwgbW9yZ...
+                    this.picture = base64String;
+                    console.log(base64String);
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+
+        convertDocToBase64String() {
+            // get a reference to the file
+            console.log(this.scan_frame_file)
+            const doc = this.scan_frame_file;
+            if(!doc)
+            {
+                this.scan_frame = null;
+                this.scan_frame_name = null;
+            }
+            else {
+
+                this.scan_frame_name = doc.name;
+                // encode the file using the FileReader API
+                const reader = new FileReader();
+                reader.onloadend = () => {
+
+                    // use a regex to remove data url part
+                    const base64String = reader.result
+                        .replace('data:', '')
+                        .replace(/^.+,/, '');
+
+                    // log to console
+                    // logs wL2dvYWwgbW9yZ...
+                    this.scan_frame = base64String;
+                    console.log(base64String);
+                };
+                reader.readAsDataURL(doc);
+            }
+        },
+
         submit () {
             console.log(this.$refs.observer.validate())
             this.$refs.observer.validate().then((result) => {
@@ -544,11 +620,14 @@ export default {
                     else
                         this.card.owner_signs = 'Нет черт';
 
-                    if(this.picture !== null && this.picture.length > 0)
-                        this.cardObj.picture = 'coooooool'
+                    if(this.picture !== null && !this.isDefaultAvatar)
+                        this.cardObj.picture = this.picture;
 
-                    if(this.scan_frame !== null && this.scan_frame.length > 0)
-                        this.cardObj.scan_frame= 'coooooool'
+                    if(this.scan_frame !== null) {
+                        this.cardObj.scan_frame = this.scan_frame
+                        this.cardObj.scan_frame_name = this.scan_frame_name
+                    }
+
 
                     this.cardObj.change_status_date = this.getNowDate();
 

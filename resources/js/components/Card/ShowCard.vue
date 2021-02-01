@@ -20,17 +20,58 @@
                             max-width="250"
                             tile
                         >
-                            <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+                            <v-img :src="setAvatarImage()"></v-img>
                         </v-avatar>
                     </div>
                 </v-col>
                 <v-col cols="9">
                     <v-row>
-                        <v-col cols="8">
+                        <v-col cols="6">
                             <h1 class="mb-0">{{ card.animal_name }}</h1>
                             <p class="text--subtitle">{{ card.animal_traits.category === 'cat' ? 'Кошка' : 'Собака' }} </p>
                         </v-col>
-                        <v-col cols="2" class="text-end" v-if="isLoggedIn && getRole.change_access">
+                        <v-col cols="2">
+                            <v-speed-dial
+                                style="width: min-content; float:right;"
+                                v-model="fab"
+                                direction="bottom"
+                                transition="slide-y-transition"
+                            >
+                                <template v-slot:activator>
+                                    <v-btn
+                                        v-model="fab"
+                                        color="blue darken-2"
+                                        dark
+                                        fab
+                                    >
+                                        <v-icon v-if="fab">
+                                            mdi-close
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            mdi-account-circle
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-btn
+                                    fab
+                                    dark
+                                    small
+                                    color="green"
+                                    @click="exportDoc()"
+                                >
+                                    <v-icon>mdi-pencil</v-icon>
+                                </v-btn>
+                                <v-btn
+                                    fab
+                                    dark
+                                    small
+                                    color="indigo"
+                                >
+                                    <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                            </v-speed-dial>
+                        </v-col>
+                        <v-col cols="2" class="text-center" v-if="isLoggedIn && getRole.change_access">
                             <v-btn
                                 class="mx-2"
                                 fab
@@ -236,7 +277,34 @@
                         </v-tab-item>
                         <v-tab-item>
                             <v-card flat>
-                                <v-card-text v-text="'тут доки'"></v-card-text>
+                                <v-card
+                                    color="primary"
+                                    dark
+                                    max-width="344"
+                                    outlined
+                                >
+                                    <v-list-item three-line>
+                                        <v-list-item-content>
+                                            <div class="overline mb-4">
+                                                DOCX
+                                            </div>
+                                            <v-list-item-title class="headline mb-1">
+                                                {{ card.scan_frame_name }}
+                                            </v-list-item-title>
+                                            <v-list-item-subtitle>Акт возврата животного без владельцев в прежнее место обитания</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-card-actions>
+                                        <v-btn
+                                            outlined
+                                            rounded
+                                            @click="downloadDoc(card.scan_frame, card.scan_frame_name)"
+                                        >
+                                            Загрузить
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
                             </v-card>
                         </v-tab-item>
                     </v-tabs-items>
@@ -255,6 +323,7 @@ import localization from "../../mixins/localization";
 import Swal from "sweetalert2";
 import { mapGetters } from "vuex";
 import LoginActions from "../../apis/LoginActions";
+import { saveAs } from 'file-saver';
 
 export default {
     name: "Card",
@@ -268,6 +337,7 @@ export default {
     data() {
         return {
             mdiDelete,
+            fab: false,
             tab: null
         }
     },
@@ -279,6 +349,63 @@ export default {
         console.log(this.card);
     },
     methods: {
+        exportDoc() {
+          axios.post('https://localhost:44354/api/export/export_to_word', JSON.stringify({
+                'card_number': this.card.id,
+                    'place': this.card.place,
+                    'municipality': this.card.municipality,
+                    'chip_number': this.card.chip_number,
+                    'category': this.card.animal_traits.category
+            }),
+              {
+                  headers: {
+                      'Access-Control-Allow-Headers': 'Accepts, Content-Type, Origin, X-My-Header',
+                      'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                      'Access-Control-Allow-Origin': '*',
+                      'Access-Control-Allow-Credentials': 'false',
+                      'Referrer-Policy': 'strict-origin-when-cross-origin'
+            }}).then((response) => {
+                console.log(response);
+                this.downloadDoc(response.data, 'Акт.docx')
+          })
+        },
+        convertBase64toBlob(content, contentType = 'application/msword') {
+            contentType = contentType || '';
+            let sliceSize = 512;
+            let byteCharacters = window.atob(content); //method which converts base64 to binary
+            let byteArrays = [
+            ];
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            let blob = new File(byteArrays, this.card.scan_frame_name, {
+                type: contentType
+            }) //statement which creates the blob
+            return blob;
+        },
+
+        downloadDoc(file, name = "document.docs") {
+            saveAs(this.convertBase64toBlob(file, 'application/msword'), name);
+        },
+
+        setAvatarImage() {
+            if(this.card.picture !== null && this.card.picture.trim() !== '')
+            {
+                return 'data:image/png;base64, ' + this.card.picture;
+            }
+            else {
+                return this.card.animal_traits.category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg'
+            }
+        },
+
         backToRegister(status) {
             if(status)
                 window.location.href = '/register/public';

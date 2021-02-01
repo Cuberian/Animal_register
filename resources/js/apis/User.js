@@ -5,6 +5,6 @@ export default {
         return Api().get('/api/get_user');
     },
     logout() {
-        return Api().post('/api/logout');
+        return Api().post('/api/user/logout');
     }
 }

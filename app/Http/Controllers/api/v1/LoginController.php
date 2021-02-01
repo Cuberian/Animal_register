@@ -44,11 +44,8 @@ class LoginController extends Controller
         return $new_user->createToken('authToken')->accessToken;
     }
 
-    public function logout() {
-        auth()->user()->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
-
+    public function logout(Request $request) {
+        $request->user()->tokens()->delete();
         return response(['message' => 'Logged out successfully']);
     }
 }

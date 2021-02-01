@@ -85,10 +85,10 @@
                         <v-col>
                             <v-img
                                 lazy-src="https://picsum.photos/id/11/10/6"
-                                max-height="95%"
-                                max-width="95%"
+                                height="300"
+                                width="300"
                                 class="mx-auto"
-                                src="https://picsum.photos/id/11/500/300"
+                                :src="setAvatarImage"
                             ></v-img>
                         </v-col>
                     </v-row>
@@ -97,6 +97,8 @@
                             <div class="mx-auto" style="max-width: 95%">
                             <v-file-input
                                 label="Изображение"
+                                v-model="pictureFile"
+                                @change="convertImageToBase64String()"
                                 outlined
                             ></v-file-input>
                             </div>
@@ -342,6 +344,8 @@
                     <v-col cols="12">
                         <v-file-input
                             label="Акт возврата животного без владельцев в прежнее место обитания"
+                            v-model="scan_frame_file"
+                            @change="convertDocToBase64String()"
                             outlined
                         ></v-file-input>
                     </v-col>
@@ -380,6 +384,12 @@ export default {
     },
     data() {
         return {
+            isDefaultAvatar: true,
+            picture: null,
+            pictureFile: null,
+            scan_frame_name:null,
+            scan_frame_file: null,
+            scan_frame: null,
             birthdayModal: false,
             sterilizationDateModal: false,
             vaccinationDateModal: false,
@@ -425,10 +435,36 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['isLoggedIn', 'getRole'])
+        ...mapGetters(['isLoggedIn', 'getRole']),
+        setAvatarImage() {
+            if(this.picture !== null && this.picture.trim() !== '')
+            {
+                this.isDefaultAvatar = false;
+                return 'data:image/png;base64, ' + this.picture;
+            }
+            else {
+                this.isDefaultAvatar = true;
+                return this.card.animal_traits.category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg'
+            }
+        }
     },
     created() {
         console.log(this.card);
+        if(this.card.picture !== null) {
+            this.picture = this.card.picture
+            let image = new Image();
+            image.name = 'avatar.png'
+            image.src = `data:image/png;base64, ${this.picture}`;
+            this.pictureFile = image;
+            this.isDefaultAvatar = false;
+        }
+
+        if(this.card.scan_frame !== null) {
+            this.scan_frame_name = this.card.scan_frame_name;
+            this.scan_frame = this.card.scan_frame;
+            this.scan_frame_file = this.convertBase64toBlob(this.scan_frame, 'application/msword');
+
+        }
         if(this.card.owner_signs !== 'Нет черт')
             this.ownerTraitsSelect = this.card.owner_signs.split(', ').map((el) => {
                 return {
@@ -442,6 +478,83 @@ export default {
 
     },
     methods: {
+        convertBase64toBlob(content, contentType = 'application/msword') {
+            contentType = contentType || '';
+            let sliceSize = 512;
+            let byteCharacters = window.atob(content); //method which converts base64 to binary
+            let byteArrays = [
+            ];
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            let blob = new File(byteArrays, this.card.scan_frame_name, {
+                type: contentType
+            }) //statement which creates the blob
+            return blob;
+        },
+
+        convertImageToBase64String() {
+            // get a reference to the file
+            const file = this.pictureFile;
+            if(!file)
+            {
+                this.picture = null;
+            }
+            else {
+                // encode the file using the FileReader API
+                const reader = new FileReader();
+                reader.onloadend = () => {
+
+                    // use a regex to remove data url part
+                    const base64String = reader.result
+                        .replace('data:', '')
+                        .replace(/^.+,/, '');
+
+                    // log to console
+                    // logs wL2dvYWwgbW9yZ...
+                    this.picture = base64String;
+                    console.log(base64String);
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+
+        convertDocToBase64String() {
+            // get a reference to the file
+            console.log(this.scan_frame_file)
+            const doc = this.scan_frame_file;
+            if(!doc)
+            {
+                this.scan_frame = null;
+                this.scan_frame_name = null;
+            }
+            else {
+
+                this.scan_frame_name = doc.name;
+                // encode the file using the FileReader API
+                const reader = new FileReader();
+                reader.onloadend = () => {
+
+                    // use a regex to remove data url part
+                    const base64String = reader.result
+                        .replace('data:', '')
+                        .replace(/^.+,/, '');
+
+                    // log to console
+                    // logs wL2dvYWwgbW9yZ...
+                    this.scan_frame = base64String;
+                    console.log(base64String);
+                };
+                reader.readAsDataURL(doc);
+            }
+        },
+
         submit () {
             console.log(this.$refs.observer.validate())
             this.$refs.observer.validate().then((result) => {
@@ -453,6 +566,13 @@ export default {
                         this.card.owner_signs = this.card.owner_signs.join(", ");
                     } else
                         this.card.owner_signs = 'Нет черт';
+
+                    if(this.picture !== this.card.picture && !this.isDefaultAvatar)
+                        this.card.picture = this.picture;
+                    if(this.scan_frame !== this.card.scan_frame) {
+                        this.card.scan_frame = this.scan_frame;
+                        this.card.scan_frame_name = this.scan_frame_name;
+                    }
 
                     Swal.fire({
                         title: 'Вы уверены?',

@@ -14,15 +14,33 @@
             </v-btn>
 
             <v-spacer></v-spacer>
-            <v-btn icon v-if="isLoggedIn">
-                <v-avatar
-                    tile
-                    color="secondary"
-                    size="40"
-                >      <v-icon light>
-                    mdi-face
-                </v-icon></v-avatar>
-            </v-btn>
+            <v-menu
+                v-if="isLoggedIn"
+                rounded
+                offset-y
+            >
+                <template v-slot:activator="{ attrs, on }">
+                    <v-btn tile icon v-if="isLoggedIn" v-bind="attrs" v-on="on">
+                        <v-avatar
+                            tile
+                            color="secondary"
+                            size="40"
+                        >
+                            <v-icon light>mdi-face</v-icon>
+                        </v-avatar>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item>
+                        <v-list-item-title>Профиль</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="logout()">
+                        <v-list-item-title>Выйти</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+
 
             <v-btn text href="/auth/login" v-if="!isLoggedIn">
                 Войти
@@ -55,6 +73,7 @@ export default {
             User.logout().then(() => {
                 localStorage.removeItem('token');
                 this.$store.commit('LOGIN', false);
+                window.location.href = '/register/public'
             })
         }
     }

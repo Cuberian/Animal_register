@@ -1,10 +1,22 @@
 <template>
     <div>
-        <div v-if="cards.length > 0" class="grid-container justify-content-center mt-3">
+        <v-row  class="mt-4 mb-4 ml-2">
+            <v-btn
+                class="ml-3"
+                fab
+                dark
+                small
+                color="green"
+                @click="updateRegister()"
+            >
+                <v-icon>mdi-cached</v-icon>
+            </v-btn>
+        </v-row>
+        <div v-if="cardsArray !== null && cardsArray.length > 0" class="grid-container justify-content-center mt-3">
             <v-card
                 class="animal-card"
                 outlined
-                v-for="card in cards" :key="card.id"
+                v-for="card in cardsArray" :key="card.id"
             >
                 <v-list-item three-line>
                     <v-list-item-content>
@@ -79,6 +91,26 @@
                             </template>
                             <span>Удалить</span>
                         </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    class="ml-2"
+                                    rounded
+                                    outlined
+                                    color="blue-grey lighten-3"
+                                    fab
+                                    small
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="nonpublicCard(card.id)"
+                                >
+                                    <v-icon>
+                                        mdi-minus-circle
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Снять с публикации</span>
+                        </v-tooltip>
                     </template>
                 </v-card-actions>
             </v-card>
@@ -110,6 +142,7 @@ export default {
     data() {
         return {
             mdiDelete,
+            cardsArray: null,
             reveal: false
         }
     },
@@ -118,7 +151,68 @@ export default {
         ...mapGetters(['isLoggedIn','getRole'])
     },
 
+    created() {
+        this.cardsArray = this.cards;
+    },
+
     methods: {
+        nonpublicCard(id) {
+            Swal.fire({
+                title: 'Вы уверены?',
+                text: "Текущая карта будет снята с публикации",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Да',
+                cancelButtonText: 'Нет'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let update = () => this.updateRegister();
+
+                    Swal.fire({
+                        title: 'Проверяем лапки',
+                        html: `<img src="/img/346.gif"/>`,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            LoginActions.nonpublicCard(id)
+                                .then((response) => {
+                                    if(response.status === 200)
+                                    {
+                                        Swal.close();
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(
+                                        `Ошибка редактирования: ${error}`
+                                    )
+                                })
+                        },
+                        allowOutsideClick: false
+                    }).then(function () {
+                        Swal.fire({
+                            title: 'Снято с публикации!',
+                            text: 'Карта была снята с публикации',
+                            icon: 'success',
+                            allowOutsideClick: false
+                        }).then(() => {
+                            update();
+                        })
+                    })
+
+
+                }
+            })
+        },
+        updateRegister() {
+            axios.get('/register/public/update').then((response) => {
+                if(response.status === 200)
+                {
+                    this.cardsArray = response.data.cards;
+                }
+            })
+        },
+
         openCard(id) {
             window.location.href = '/register/card/show/' + id;
         },
@@ -134,7 +228,7 @@ export default {
                 return category === 'cat' ? '/img/cat-default-avatar.jpg' : '/img/dog-default-avatar.jpg';
             }
             else
-                return imageString;
+                return 'data:image/png;base64, ' + imageString;
         },
         deleteCard(id) {
             if(this.isLoggedIn && this.getRole.change_access) {
